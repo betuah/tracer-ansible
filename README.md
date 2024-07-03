@@ -78,3 +78,53 @@ ansible-inventory -i /ansible/inventory/hosts --list
 # Ping all servers
 ansible all -m ping -i /ansible/inventory/hosts
 ```
+
+## Directory Structure
+.
+├── Dockerfile
+├── README.md
+├── ansible
+│   ├── ansible.cfg
+│   ├── inventory
+│   │   └── hosts
+│   ├── playbooks
+│   │   ├── all.yml
+│   │   ├── galera.yml
+│   │   ├── haproxy.yml
+│   │   ├── memcache.yml
+│   │   ├── nginx_php.yml
+│   │   ├── pull_apps.yml
+│   │   └── sudoers.yml
+│   └── roles
+│       ├── composer
+│       │   └── tasks
+│       │       └── main.yml
+│       ├── galera
+│       │   ├── tasks
+│       │   │   ├── bootstrap.yml
+│       │   │   ├── check.yml
+│       │   │   ├── main.yml
+│       │   │   └── users.yml
+│       │   └── templates
+│       │       └── galera.cnf.j2
+│       ├── haproxy
+│       │   ├── tasks
+│       │   │   └── main.yml
+│       │   └── templates
+│       │       └── haproxy.cfg.j2
+│       ├── memcache
+│       │   ├── tasks
+│       │   │   └── main.yml
+│       │   └── templates
+│       │       └── memcache.conf.j2
+│       ├── nginx
+│       │   ├── tasks
+│       │   │   └── main.yml
+│       │   └── templates
+│       │       └── default
+│       └── php
+│           ├── tasks
+│           │   └── main.yml
+│           └── templates
+│               └── php.ini
+└── docker-compose.yml

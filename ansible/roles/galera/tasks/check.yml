@@ -1,0 +1,11 @@
+- name: Check for Galera Cluster Status
+  command: mysql -e "SHOW STATUS LIKE 'wsrep_cluster_size';"
+  register: galera_status
+  until: galera_status.stdout.find('wsrep_cluster_size') > -1
+  retries: 10
+  delay: 10
+  delegate_to: "{{ groups['galera_cluster'][0] }}"
+
+- name: Print Galera Cluster Size
+  debug:
+    msg: "Galera Cluster Size: {{ galera_status.stdout_lines }}"

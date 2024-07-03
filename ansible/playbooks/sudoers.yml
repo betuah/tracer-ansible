@@ -1,0 +1,11 @@
+---
+- name: Ensure sysadmin user can run sudo without a password
+  hosts: all
+  become: true
+  tasks:
+    - name: Add sysadmin user to sudoers file with NOPASSWD
+      lineinfile:
+        path: /etc/sudoers
+        regexp: '^sysadmin'
+        line: 'sysadmin ALL=(ALL) NOPASSWD:ALL'
+        validate: 'visudo -cf %s'

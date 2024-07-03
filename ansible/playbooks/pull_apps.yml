@@ -1,0 +1,15 @@
+---
+- name: Clone Application from Private GitHub Repository
+  hosts: apps
+  tasks:
+    - name: Clone the repository from GitHub
+      git:
+        repo: 'https://{{ github_token }}:x-oauth-basic@github.com/{{ github_username }}/{{ github_repo }}.git'
+        dest: /var/www/html  # Web Server Document Root
+        version: main  # Branch
+        update: yes
+      vars:
+        ansible_python_interpreter: /usr/bin/python3
+        github_username: "{{ github_username }}"
+        github_repo: "{{ github_repo }}"
+        github_token: "{{ github_token }}"

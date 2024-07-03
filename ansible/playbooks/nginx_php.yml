@@ -1,0 +1,18 @@
+---
+- name: Setup Nginx, PHP-FPM, and Composer for Laravel
+  hosts: apps
+  become: true
+  roles:
+    - nginx
+    - php
+    - composer
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+    - name: Restart PHP-FPM
+      service:
+        name: php8.1-fpm
+        state: restarted
+

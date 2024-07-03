@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  ansible:
+    # image: williamyeh/ansible:alpine3
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ANSIBLE_CORE_VERSION: "2.16"
+        ANSIBLE_VERSION: "9.7.0"
+        ANSIBLE_LINT: "6.13.0"
+    container_name: ansible
+    platform: linux/amd64
+    volumes:
+      - ./ansible/playbooks:/ansible/playbooks
+      - ./ansible/inventory:/ansible/inventory
+      - ./ansible/roles:/ansible/roles
+      - ./ansible/ansible.cfg:/etc/ansible/ansible.cfg
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
+    environment:
+      ANSIBLE_CONFIG: /ansible/ansible.cfg
+    networks:
+      - galera-network
+    command: "/bin/sh -c 'while true; do sleep 1000; done'"
+    tty: true
+
+networks:
+  galera-network:
+    driver: bridge

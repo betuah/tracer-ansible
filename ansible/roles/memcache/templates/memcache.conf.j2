@@ -1,0 +1,26 @@
+# Memcached configuration file
+
+# Listen on the IP address 127.0.0.1 (localhost)
+# This means Memcached will only accept connections from the local machine.
+# If you need to accept connections from other machines, change this to a public IP or 0.0.0.0 for all interfaces.
+-l 127.0.0.1
+
+# Specify the port number Memcached will listen on
+# Default port is 11211, but you can change it if needed.
+-p 11211
+
+# Set the amount of memory (in MB) allocated for caching
+# This example sets 64 MB of memory for Memcached. Adjust this value based on your system's available RAM.
+-m 64
+
+# Set the maximum number of simultaneous connections
+# This example allows up to 1024 connections. Increase this value for higher concurrency needs.
+-c 1024
+
+# Define the number of threads Memcached will use
+# In this case, Memcached will use 4 threads. Adjust this based on the number of CPU cores.
+-t 4
+
+# Set the user account Memcached runs as
+# This example uses the 'memcache' user for better security. Ensure this user exists or change to an appropriate user.
+-u memcache

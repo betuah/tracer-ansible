@@ -1,0 +1,41 @@
+global
+    log 127.0.0.1 local0 notice
+    user haproxy
+    group haproxy
+
+defaults
+    log global
+    retries 2
+    timeout connect 3000
+    timeout server 5000
+    timeout client 5000
+
+listen mariadb-cluster
+    bind 0.0.0.0:3306
+    mode tcp
+    option tcpka
+    # option mysql-check user haproxy
+    balance roundrobin
+    server mariadb-1 {{ groups['galera_cluster'][0] }}:3306 check weight 1
+    server mariadb-2 {{ groups['galera_cluster'][1] }}:3306 check weight 1
+    server mariadb-3 {{ groups['galera_cluster'][2] }}:3306 check weight 1
+
+# HTTP traffic on port 80
+frontend http-frontend
+    bind *:80
+    default_backend http-backend
+
+backend http-backend
+    balance roundrobin
+    server webapp-1 {{ groups['apps'][0] }}:80 check weight 1
+    server webapp-2 {{ groups['apps'][1] }}:80 check weight 1
+
+# Optional: Add an HTTP to HTTPS redirection
+# frontend http
+#    bind *:80
+#    redirect scheme https code 301 if !{ ssl_fc }
+
+# Optional: Define the HTTPS frontend (if you are using SSL/TLS)
+# frontend https
+#    bind *:443 ssl crt /etc/haproxy/certs/example.com.pem
+#    default_backend http-backend

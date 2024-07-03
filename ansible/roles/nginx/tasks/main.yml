@@ -1,0 +1,38 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Ensure Nginx is running and enabled
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Copy Nginx configuration for Laravel
+  template:
+    src: default
+    dest: /etc/nginx/sites-available/default
+  notify: Restart Nginx
+
+- name: Create symlink for Nginx configuration
+  command:
+    cmd: ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+    creates: /etc/nginx/sites-enabled/default
+  notify: Restart Nginx
+
+- name: Ensure Nginx is running and enabled
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: Allow Nginx through the firewall
+  ufw:
+    rule: allow
+    name: 'Nginx Full'

@@ -1,0 +1,25 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Memcached package
+  apt:
+    name: memcached
+    state: present
+
+- name: Install Memcached PHP extension (optional, remove if not needed)
+  apt:
+    name: php-memcached
+    state: present
+
+- name: Configure Memcached
+  template:
+    src: memcached.conf.j2
+    dest: /etc/memcached.conf
+  notify: Restart Memcached
+
+- name: Ensure Memcached is started and enabled
+  systemd:
+    name: memcached
+    state: started
+    enabled: yes

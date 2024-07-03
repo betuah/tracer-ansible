@@ -1,0 +1,10 @@
+- name: Install and Configure Memcached on Ubuntu 22.04
+  hosts: cache
+  become: true
+  roles:
+    - memcache
+  handlers:
+    - name: Restart Memcached
+      service:
+        name: memcached
+        state: restarted

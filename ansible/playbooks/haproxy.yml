@@ -1,0 +1,10 @@
+- name: Configure HAProxy
+  hosts: haproxy
+  become: true
+  roles:
+    - haproxy
+  handlers:
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted

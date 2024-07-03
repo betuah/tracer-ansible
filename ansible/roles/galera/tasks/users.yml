@@ -1,0 +1,31 @@
+- name: Ensure MySQL root user password is changed
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ db_root_password }}"
+    update_password: always
+    state: present
+
+- name: Create MySQL user for HAProxy health checks
+  mysql_user:
+    name: haproxy
+    priv: ".*:USAGE"
+    host: '%'
+    password: ''
+    state: present
+  delegate_to: "{{ groups['galera_cluster'][0] }}"
+
+- name: Create MySQL user for application
+  mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: "{{ db_name }}.*:ALL"
+    host: '%'
+    state: present
+  delegate_to: "{{ groups['galera_cluster'][0] }}"
+
+- name: Create database
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+  delegate_to: "{{ groups['galera_cluster'][0] }}"

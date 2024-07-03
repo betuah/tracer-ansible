@@ -1,0 +1,37 @@
+- name: Check if grastate.dat exists
+  stat:
+    path: /var/lib/mysql/grastate.dat
+  register: grastate
+  delegate_to: "{{ groups['galera_cluster'][0] }}"
+
+- name: Remove grastate.dat if it exists
+  file:
+    path: /var/lib/mysql/grastate.dat
+    state: absent
+  delegate_to: "{{ groups['galera_cluster'][0] }}"
+  when: grastate.stat.exists
+
+- name: Stop MariaDB Service on All Nodes
+  service:
+    name: mariadb
+    state: stopped
+
+- name: Initialize the Galera Cluster on node 1
+  shell: galera_new_cluster
+  run_once: true
+  delegate_to: "{{ groups['galera_cluster'][0] }}"
+  when: grastate.stat.exists
+
+- name: start node 2
+  systemd:
+    name: mysql
+    state: started
+  # run_once: true
+  delegate_to: "{{ groups['galera_cluster'][1] }}"
+
+- name: start node 3
+  systemd:
+    name: mysql
+    state: started
+  # run_once: true
+  delegate_to: "{{ groups['galera_cluster'][2] }}"

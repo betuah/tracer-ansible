@@ -1,0 +1,61 @@
+- name: Setup Nginx, PHP-FPM, and Composer for Laravel
+  hosts: apps
+  become: true
+  roles:
+    - nginx
+    - php
+    - composer
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+    - name: Restart PHP-FPM
+      service:
+        name: php8.1-fpm
+        state: restarted
+
+- name: Install and Configure Memcached on Ubuntu 22.04
+  hosts: cache
+  become: true
+  roles:
+    - memcache
+  handlers:
+    - name: Restart Memcached
+      service:
+        name: memcached
+        state: restarted
+
+- name: Update and upgrade all servers
+  hosts: all
+  become: true
+  tasks:
+    - name: Update APT package list
+      apt:
+        update_cache: yes
+    
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist
+
+- name: Configure Galera Cluster and HAProxy
+  hosts: galera_cluster
+  become: true
+  roles:
+    - galera
+  handlers:
+    - name: Restart MariaDB
+      service:
+        name: mysql
+        state: restarted
+
+- name: Configure HAProxy
+  hosts: haproxy
+  become: true
+  roles:
+    - haproxy
+  handlers:
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted

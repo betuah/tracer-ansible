@@ -52,7 +52,7 @@ docker exec -it ansible /bin/sh
 ### 3. Run the Playbook:
 Inside the container, execute the desired Ansible playbook:
 ```sh
-ansible-playbook /ansible/playbooks/galera.yml
+ansible-playbook /ansible/playbooks/all.yml
 ```
 
 ## Ansible Playbook

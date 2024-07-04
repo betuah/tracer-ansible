@@ -22,10 +22,10 @@ services:
     environment:
       ANSIBLE_CONFIG: /ansible/ansible.cfg
     networks:
-      - galera-network
+      - tracer-network
     command: "/bin/sh -c 'while true; do sleep 1000; done'"
     tty: true
 
 networks:
-  galera-network:
+  tracer-network:
     driver: bridge

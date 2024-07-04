@@ -91,6 +91,7 @@ ansible all -m ping -i /ansible/inventory/hosts
 ```
 
 ## Directory Structure
+```plaintext
 .
 ├── Dockerfile
 ├── README.md
@@ -139,3 +140,4 @@ ansible all -m ping -i /ansible/inventory/hosts
 │           └── templates
 │               └── php.ini
 └── docker-compose.yml
+```

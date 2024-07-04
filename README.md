@@ -33,23 +33,34 @@ username ALL=(ALL) NOPASSWD:ALL
 
 ## Running Ansible for Project
 
+# Project Setup
+
 ### Pretask
 For servers that require a password, run the following command to apply the **`sudoers`** configuration:
 ```sh
 ansible-playbook /ansible/playbooks/sudoers.yml --ask-become-pass
 ```
 
-### 1. Run Docker Compose
+### 1. Configure Ansible Inventory
+Copy the example inventory file to create your own inventory file:
+```sh
+cp ./ansible/inventory/hosts.example ./ansible/inventory/hosts
+```
+Edit the **`hosts`** file to match your environment:
+```sh
+nano ./ansible/inventory/hosts
+```
+### 2. Run Docker Compose
 To start the Ansible services, execute the following command:
 ```sh
 docker-compose up -d
 ```
-### 2. Access the Container
+### 3. Access the Container
 To access the Ansible container, use the following command:
 ```sh
 docker exec -it ansible /bin/sh
 ```
-### 3. Run the Playbook:
+### 3\4. Run the Playbook:
 Inside the container, execute the desired Ansible playbook:
 ```sh
 ansible-playbook /ansible/playbooks/all.yml

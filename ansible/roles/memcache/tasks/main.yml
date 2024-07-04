@@ -18,17 +18,6 @@
     dest: /etc/memcached.conf
   notify: Restart Memcached
 
-- name: Check Memcached connection
-  command: telnet localhost 11211
-  register: memcached_connection
-  ignore_errors: true
-
-- name: Display Memcached connection result
-  debug:
-    msg: "Memcached connection status: {{ memcached_connection.stdout }}"
-  when: memcached_connection.rc == 0
-  tags: memcache
-
 - name: Ensure Memcached is started and enabled
   systemd:
     name: memcached

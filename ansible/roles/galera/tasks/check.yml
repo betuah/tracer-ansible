@@ -1,9 +1,9 @@
-- name: Check for Galera Cluster Status
-  command: mysql -e "SHOW STATUS LIKE 'wsrep_cluster_size';"
+- name: Check for Galera Cluster Status with password
+  command: mysql -u root -p"{{ db_root_password }}" -e "SHOW STATUS LIKE 'wsrep_cluster_size';"
   register: galera_status
   until: galera_status.stdout.find('wsrep_cluster_size') > -1
-  retries: 10
-  delay: 10
+  retries: 3
+  delay: 5
   delegate_to: "{{ groups['galera_cluster'][0] }}"
 
 - name: Print Galera Cluster Size

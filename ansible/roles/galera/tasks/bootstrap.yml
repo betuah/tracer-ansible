@@ -20,18 +20,15 @@
   shell: galera_new_cluster
   run_once: true
   delegate_to: "{{ groups['galera_cluster'][0] }}"
-  when: grastate.stat.exists
 
 - name: start node 2
   systemd:
     name: mysql
     state: started
-  # run_once: true
   delegate_to: "{{ groups['galera_cluster'][1] }}"
 
 - name: start node 3
   systemd:
     name: mysql
     state: started
-  # run_once: true
   delegate_to: "{{ groups['galera_cluster'][2] }}"

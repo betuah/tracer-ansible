@@ -1,18 +1,12 @@
-- name: Ensure MySQL root user password is changed
+- name: Try change MySQL root password
   mysql_user:
     name: root
     host: localhost
     password: "{{ db_root_password }}"
     update_password: always
     state: present
-
-- name: Create MySQL user for HAProxy health checks
-  mysql_user:
-    name: haproxy
-    priv: ".*:USAGE"
-    host: '%'
-    password: ''
-    state: present
+  ignore_errors: true
+  run_once: true
   delegate_to: "{{ groups['galera_cluster'][0] }}"
 
 - name: Create MySQL user for application
@@ -22,10 +16,16 @@
     priv: "{{ db_name }}.*:ALL"
     host: '%'
     state: present
+    login_user: root
+    login_password: "{{ db_root_password }}"
+  run_once: true
   delegate_to: "{{ groups['galera_cluster'][0] }}"
 
 - name: Create database
   mysql_db:
     name: "{{ db_name }}"
     state: present
+    login_user: root
+    login_password: "{{ db_root_password }}"
+  run_once: true
   delegate_to: "{{ groups['galera_cluster'][0] }}"

@@ -1,4 +1,12 @@
----
+
+- name: Update APT package list
+  apt:
+    update_cache: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    upgrade: dist
+
 - name: Install required packages
   apt:
     name:
@@ -29,8 +37,8 @@
 - name: bootstap cluster
   import_tasks: bootstrap.yml
 
-- name: Check for Galera Cluster Status
-  import_tasks: check.yml
-
 - name: Create MySQL User
   import_tasks: users.yml
+
+- name: Check for Galera Cluster Status
+  import_tasks: check.yml

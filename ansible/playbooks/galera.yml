@@ -1,16 +1,4 @@
-- name: Update and upgrade all servers
-  hosts: all
-  become: true
-  tasks:
-    - name: Update APT package list
-      apt:
-        update_cache: yes
-    
-    - name: Upgrade all packages to the latest version
-      apt:
-        upgrade: dist
-
-- name: Configure Galera Cluster and HAProxy
+- name: Configure Galera Cluster
   hosts: galera_cluster
   become: true
   roles:
